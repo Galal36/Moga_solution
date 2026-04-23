@@ -33,7 +33,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: "dist/client/*"
+          source: "dist/spa/*"
           target: "/var/www/moga/apps/moga/frontend/dist"
           strip_components: 2
           overwrite: true
