@@ -28,11 +28,13 @@ jobs:
         run: pnpm run build:client
 
       - name: Deploy to VPS
-        uses: easingthemes/ssh-deploy@v4
+        uses: appleboy/scp-action@v0.1.7
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.VPS_HOST }}
-          REMOTE_USER: ${{ secrets.VPS_USER }}
-          SOURCE: "dist/client/"
-          TARGET: "/var/www/moga/apps/moga/frontend/dist/"
-          ARGS: "-rlgoc --delete"
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "dist/client/*"
+          target: "/var/www/moga/apps/moga/frontend/dist"
+          strip_components: 2
+          overwrite: true
+          rm: true
