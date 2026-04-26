@@ -32,3 +32,4 @@ jobs:
           mkdir -p /var/www/moga/apps/moga/frontend/dist
           rm -rf /var/www/moga/apps/moga/frontend/dist/*
           cp -r dist/spa/* /var/www/moga/apps/moga/frontend/dist/
+          chmod -R 755 /var/www/moga/apps/moga/frontend/dist
