@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SiteLayout from "./components/site/site-layout";
 import { LanguageProvider } from "./i18n/language-context";
 import Index from "./pages/Index";
+import JobContentCreator from "./pages/JobContentCreator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ export default function App() {
             <Routes>
               <Route element={<SiteLayout />}>
                 <Route path="/" element={<Index />} />
+                <Route path="/jobs/content_creator" element={<JobContentCreator />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
