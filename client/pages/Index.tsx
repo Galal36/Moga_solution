@@ -41,7 +41,7 @@ function SectionHeading({
   return (
     <div
       className={cn(
-        "max-w-3xl space-y-4",
+        "max-w-3xl space-y-6",
         centered ? "mx-auto text-center" : "",
       )}
     >
@@ -100,11 +100,11 @@ export default function Index() {
                 {t.hero.badge}
               </div>
 
-              <div className="space-y-5 sm:space-y-6">
-                <h1 className={cn("text-balance text-4xl font-semibold leading-[0.95] tracking-[-0.05em] text-white sm:text-5xl lg:text-[4.75rem]", !isRTL && "lg:max-w-[12ch]")}>
+              <div className="space-y-6 sm:space-y-8">
+                <h1 className={cn("text-balance text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[4.75rem]", !isRTL && "lg:max-w-[20ch]")}>
                   {t.hero.heading}
                 </h1>
-                <p className="max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
+                <p className="max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg sm:leading-8">
                   {t.hero.description}
                 </p>
               </div>
@@ -443,6 +443,23 @@ export default function Index() {
               title={t.contact.title}
               description={t.contact.description}
             />
+
+            <div className="mt-8 rounded-[32px] border border-slate-200 bg-white p-7 shadow-soft">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-deep">
+                Contact Information
+              </p>
+              <div className="mt-5 space-y-3">
+                <div className="flex flex-col gap-1 rounded-2xl bg-slate-50 px-4 py-4">
+                  <p className="text-sm font-medium text-slate-900">Phone & WhatsApp</p>
+                  <p className="text-sm text-slate-700" dir="ltr">+01554529222</p>
+                </div>
+                <div className="flex flex-col gap-1 rounded-2xl bg-slate-50 px-4 py-4">
+                  <p className="text-sm font-medium text-slate-900">Email</p>
+                  <p className="text-sm text-slate-700">mogasupport@gmail.com</p>
+                  <p className="text-xs text-amber-600 mt-1">(currently not available please contact phone or whats app on the phone above)</p>
+                </div>
+              </div>
+            </div>
 
             <div className="mt-8 rounded-[32px] border border-slate-200 bg-white p-7 shadow-soft">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-deep">
