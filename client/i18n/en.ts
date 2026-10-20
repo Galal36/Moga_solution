@@ -246,9 +246,12 @@ export const en = {
       "Describe the workflow, product idea, or business problem you want to solve.",
     submitButton: "Send project brief",
     submittedText:
-      "Thanks. This interaction is currently running in frontend-only mode and is ready to be connected to your backend workflow next.",
+      "Thank you! Your message has been sent successfully. We'll get back to you soon.",
     defaultText:
-      "Use this as your project intake UI now, then connect submission handling, email, or CRM logic later.",
+      "Fill in the details and we'll respond within one business day.",
+    errorText:
+      "Something went wrong. Please try again or email us directly.",
+    sendingButton: "Sending…",
   },
 
   // Footer
@@ -257,6 +260,14 @@ export const en = {
     tagline: "Custom software systems for real business operations",
     description:
       "MoGa IT Solutions designs and delivers software that helps teams work with more clarity, less manual friction, and better decision support.",
+    phone: "01096413425",
+    phoneLabel: "Call us",
+    email: "support@moga-solutions.tech",
+    emailLabel: "Email us",
+    whatsapp: "01096413425",
+    whatsappLabel: "WhatsApp",
+    facebookUrl: "https://www.facebook.com/profile.php?id=61589600187820",
+    facebookLabel: "Facebook",
     navigateLabel: "Navigate",
     ctaLabel: "Ready to discuss a build?",
     ctaDescription:

@@ -10,7 +10,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { FadeIn } from "@/components/site/fade-in";
@@ -65,7 +65,7 @@ function SectionHeading({
       </h2>
       <p
         className={cn(
-          "text-base leading-8 sm:text-lg",
+          "text-base leading-8 sm:text-lg sm:leading-9",
           inverted ? "text-slate-300" : "text-slate-600",
         )}
       >
@@ -77,6 +77,9 @@ function SectionHeading({
 
 export default function Index() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
   const { t, isRTL } = useLanguage();
 
   return (
@@ -205,7 +208,7 @@ export default function Index() {
       </section>
 
       <section id="about" className="section-shell scroll-mt-24 px-4 sm:px-6">
-        <div className="container grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+        <div className="container grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <FadeIn>
             <SectionHeading
               eyebrow={t.about.eyebrow}
@@ -251,7 +254,7 @@ export default function Index() {
       </section>
 
       <section id="services" className="section-shell scroll-mt-24 bg-slate-50 px-4 sm:px-6">
-        <div className="container space-y-12">
+        <div className="container space-y-14">
           <FadeIn>
             <SectionHeading
               eyebrow={t.services.eyebrow}
@@ -287,7 +290,7 @@ export default function Index() {
       </section>
 
       <section id="projects" className="section-shell scroll-mt-24 px-4 sm:px-6">
-        <div className="container space-y-12">
+        <div className="container space-y-14">
           <FadeIn>
             <SectionHeading
               eyebrow={t.projects.eyebrow}
@@ -339,7 +342,7 @@ export default function Index() {
       </section>
 
       <section id="process" className="section-shell scroll-mt-24 bg-slate-950 px-4 text-white sm:px-6">
-        <div className="container space-y-12">
+        <div className="container space-y-14">
           <FadeIn>
             <SectionHeading
               eyebrow={t.process.eyebrow}
@@ -393,7 +396,7 @@ export default function Index() {
       </section>
 
       <section id="why-us" className="section-shell scroll-mt-24 px-4 sm:px-6">
-        <div className="container grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+        <div className="container grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <FadeIn>
             <SectionHeading
               eyebrow={t.whyUs.eyebrow}
@@ -433,7 +436,7 @@ export default function Index() {
       </section>
 
       <section id="contact" className="section-shell scroll-mt-24 bg-slate-50 px-4 sm:px-6">
-        <div className="container grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div className="container grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <FadeIn>
             <SectionHeading
               eyebrow={t.contact.eyebrow}
@@ -475,16 +478,43 @@ export default function Index() {
             </div>
 
             <form
+              ref={formRef}
               className="mt-8 grid gap-5"
-              onSubmit={(event) => {
+              onSubmit={async (event) => {
                 event.preventDefault();
-                setSubmitted(true);
+                setSubmitting(true);
+                setErrorMsg("");
+                const fd = new FormData(formRef.current!);
+                const company = (fd.get("company") as string || "").trim();
+                const message = (fd.get("message") as string || "").trim();
+                const payload = {
+                  name: (fd.get("name") as string || "").trim(),
+                  email: (fd.get("email") as string || "").trim(),
+                  subject: (fd.get("subject") as string || "").trim(),
+                  message: company ? `[${company}] ${message}` : message,
+                };
+                try {
+                  const res = await fetch("/api/contact/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                  });
+                  if (!res.ok) throw new Error(res.statusText);
+                  setSubmitted(true);
+                  formRef.current?.reset();
+                } catch {
+                  setErrorMsg(t.contact.errorText);
+                } finally {
+                  setSubmitting(false);
+                }
               }}
             >
               <div className="grid gap-5 sm:grid-cols-2">
                 <label className="grid gap-2 text-sm font-medium text-slate-700">
                   {t.contact.labelName}
                   <input
+                    name="name"
+                    required
                     type="text"
                     placeholder={t.contact.placeholderName}
                     className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/10"
@@ -493,6 +523,7 @@ export default function Index() {
                 <label className="grid gap-2 text-sm font-medium text-slate-700">
                   {t.contact.labelCompany}
                   <input
+                    name="company"
                     type="text"
                     placeholder={t.contact.placeholderCompany}
                     className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/10"
@@ -504,6 +535,8 @@ export default function Index() {
                 <label className="grid gap-2 text-sm font-medium text-slate-700">
                   {t.contact.labelEmail}
                   <input
+                    name="email"
+                    required
                     type="email"
                     placeholder={t.contact.placeholderEmail}
                     className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/10"
@@ -511,7 +544,7 @@ export default function Index() {
                 </label>
                 <label className="grid gap-2 text-sm font-medium text-slate-700">
                   {t.contact.labelProjectType}
-                  <select className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/10">
+                  <select name="subject" className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/10">
                     {t.contact.projectTypes.map((type, index) => (
                       <option key={index}>{type}</option>
                     ))}
@@ -522,6 +555,8 @@ export default function Index() {
               <label className="grid gap-2 text-sm font-medium text-slate-700">
                 {t.contact.labelMessage}
                 <textarea
+                  name="message"
+                  required
                   rows={6}
                   placeholder={t.contact.placeholderMessage}
                   className="rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/10"
@@ -529,14 +564,15 @@ export default function Index() {
               </label>
 
               <div className="flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-xl text-sm leading-7 text-slate-600">
-                  {submitted ? t.contact.submittedText : t.contact.defaultText}
+                <p className={cn("max-w-xl text-sm leading-7", errorMsg ? "text-red-600" : "text-slate-600")}>
+                  {errorMsg || (submitted ? t.contact.submittedText : t.contact.defaultText)}
                 </p>
                 <button
                   type="submit"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-deep sm:w-auto"
+                  disabled={submitting}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-deep disabled:opacity-50 sm:w-auto"
                 >
-                  {t.contact.submitButton}
+                  {submitting ? t.contact.sendingButton : t.contact.submitButton}
                   <ArrowRight className={cn("h-4 w-4", isRTL && "scale-x-[-1]")} />
                 </button>
               </div>
