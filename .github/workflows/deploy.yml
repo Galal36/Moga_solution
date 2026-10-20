@@ -29,7 +29,7 @@ jobs:
  
       - name: Deploy to Nginx
         run: |
-          mkdir -p /var/www/moga/apps/moga/frontend/dist
-          rm -rf /var/www/moga/apps/moga/frontend/dist/*
-          cp -r dist/spa/* /var/www/moga/apps/moga/frontend/dist/
-          chmod -R 755 /var/www/moga/apps/moga/frontend/dist
+          mkdir -p /var/www/moga/apps/moga/frontend/dist/spa
+          rm -rf /var/www/moga/apps/moga/frontend/dist/spa/*
+          cp -r dist/spa/* /var/www/moga/apps/moga/frontend/dist/spa/
+          chmod -R 755 /var/www/moga/apps/moga/frontend/dist/spa
